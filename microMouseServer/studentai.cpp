@@ -1,36 +1,102 @@
 
 #include "micromouseserver.h"
 
+//directions: f=forward, l=left, r=right
+
+int moveNum = 0 ;
+char moves[400] ; //400 bc 400 total squares on maze
+
 void microMouseServer::studentAI()
 {
-    //branches
-    if ((isWallLeft() + isWallRight() + isWallForward()) <= 1)
-    {
-        if (isWallLeft()) //  |_
-        {
-            int dir = rand() % 2 ;
-            if (dir==0) { turnRight(); }
-        } else if (isWallRight()) { // _|
-            int dir = rand() % 2 ;
-            if (dir==0) { turnLeft(); }
-        } else if (isWallForward()) { // =
-            int dir = rand() % 2 ;
-            if (dir==0) { turnLeft(); }
-            else { turnRight(); }
-        } else { // _|_
-            int dir = rand() % 3 ;
-            if(dir == 0) { turnRight(); }
-            else if (dir == 1) { turnLeft(); }
-        }
-    }
-
-    if(!isWallForward()) { moveForward(); }
-    else { turnRight(); }
+    testPaths() ;
 
     /* Wall hugging:
     if (!moveForward()) { turnRight() ; }
     if(!isWallLeft()) { turnLeft() ; }
     */
+}
+
+void microMouseServer::testPaths()
+{
+    checkIntersection() ;
+    moveForward() ;
+    moveNum++ ;
+}
+
+void microMouseServer::backtrack(char dir)
+{
+    switch (dir)
+    {
+    case 'f':
+        break ;
+    case 'l':
+        break ;
+    case 'r':
+        break ;
+    }
+}
+
+void microMouseServer::checkIntersection()
+{
+    int check = int(!isWallLeft()) + int(!isWallRight()) + int(!isWallForward()) ;
+    switch (check) {
+    case 0:
+        //dead end
+        moves[moveNum] = 'x' ;
+        if (!hasoutputted)
+        {
+            printUI(moves) ;
+            hasoutputted = true ;
+        }
+        break ;
+    case 1: //single path
+        if (!isWallRight()) {
+            turnRight();
+            moves[moveNum] = 'r' ;
+        } else if (!isWallLeft()) {
+            turnLeft();
+            moves[moveNum] = 'l' ;
+        } else {
+            moves[moveNum] = 'f' ;
+        }
+        break ;
+    case 2: //two turn intersection
+        //two turn options
+        break ;
+    case 3:
+        //three turn options
+        break ;
+    }
+}
+
+void microMouseServer::twoTurns(char dir)
+{
+    if (isWallForward())
+    {
+
+    }
+    switch (dir)
+    {
+    case 'f':
+        break ;
+    case 'l':
+        break ;
+    case 'r':
+        break ;
+    }
+}
+
+void microMouseServer::threeTurns(char dir)
+{
+    switch (dir)
+    {
+    case 'f':
+        break ;
+    case 'l':
+        break ;
+    case 'r':
+        break ;
+    }
 }
 
 /*

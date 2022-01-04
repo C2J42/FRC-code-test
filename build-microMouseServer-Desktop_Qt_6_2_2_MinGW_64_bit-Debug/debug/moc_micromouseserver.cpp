@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_microMouseServer_t {
-    const uint offsetsAndSize[38];
-    char stringdata0[226];
+    const uint offsetsAndSize[50];
+    char stringdata0[288];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_microMouseServer_t, stringdata0) + ofs), len 
@@ -47,7 +47,13 @@ QT_MOC_LITERAL(169, 16), // "removeBottomWall"
 QT_MOC_LITERAL(186, 7), // "netComs"
 QT_MOC_LITERAL(194, 13), // "connect2mouse"
 QT_MOC_LITERAL(208, 7), // "startAI"
-QT_MOC_LITERAL(216, 9) // "studentAI"
+QT_MOC_LITERAL(216, 9), // "studentAI"
+QT_MOC_LITERAL(226, 17), // "checkIntersection"
+QT_MOC_LITERAL(244, 9), // "backtrack"
+QT_MOC_LITERAL(254, 3), // "dir"
+QT_MOC_LITERAL(258, 8), // "twoTurns"
+QT_MOC_LITERAL(267, 10), // "threeTurns"
+QT_MOC_LITERAL(278, 9) // "testPaths"
 
     },
     "microMouseServer\0on_tabWidget_tabBarClicked\0"
@@ -55,7 +61,9 @@ QT_MOC_LITERAL(216, 9) // "studentAI"
     "cell\0addRightWall\0addTopWall\0addBottomWall\0"
     "removeRightWall\0removeLeftWall\0"
     "removeTopWall\0removeBottomWall\0netComs\0"
-    "connect2mouse\0startAI\0studentAI"
+    "connect2mouse\0startAI\0studentAI\0"
+    "checkIntersection\0backtrack\0dir\0"
+    "twoTurns\0threeTurns\0testPaths"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,7 +73,7 @@ static const uint qt_meta_data_microMouseServer[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      15,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -73,21 +81,26 @@ static const uint qt_meta_data_microMouseServer[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  104,    2, 0x08,    1 /* Private */,
-       4,    0,  107,    2, 0x08,    3 /* Private */,
-       5,    0,  108,    2, 0x08,    4 /* Private */,
-       6,    1,  109,    2, 0x08,    5 /* Private */,
-       8,    1,  112,    2, 0x08,    7 /* Private */,
-       9,    1,  115,    2, 0x08,    9 /* Private */,
-      10,    1,  118,    2, 0x08,   11 /* Private */,
-      11,    1,  121,    2, 0x08,   13 /* Private */,
-      12,    1,  124,    2, 0x08,   15 /* Private */,
-      13,    1,  127,    2, 0x08,   17 /* Private */,
-      14,    1,  130,    2, 0x08,   19 /* Private */,
-      15,    0,  133,    2, 0x08,   21 /* Private */,
-      16,    0,  134,    2, 0x08,   22 /* Private */,
-      17,    0,  135,    2, 0x08,   23 /* Private */,
-      18,    0,  136,    2, 0x08,   24 /* Private */,
+       1,    1,  134,    2, 0x08,    1 /* Private */,
+       4,    0,  137,    2, 0x08,    3 /* Private */,
+       5,    0,  138,    2, 0x08,    4 /* Private */,
+       6,    1,  139,    2, 0x08,    5 /* Private */,
+       8,    1,  142,    2, 0x08,    7 /* Private */,
+       9,    1,  145,    2, 0x08,    9 /* Private */,
+      10,    1,  148,    2, 0x08,   11 /* Private */,
+      11,    1,  151,    2, 0x08,   13 /* Private */,
+      12,    1,  154,    2, 0x08,   15 /* Private */,
+      13,    1,  157,    2, 0x08,   17 /* Private */,
+      14,    1,  160,    2, 0x08,   19 /* Private */,
+      15,    0,  163,    2, 0x08,   21 /* Private */,
+      16,    0,  164,    2, 0x08,   22 /* Private */,
+      17,    0,  165,    2, 0x08,   23 /* Private */,
+      18,    0,  166,    2, 0x08,   24 /* Private */,
+      19,    0,  167,    2, 0x08,   25 /* Private */,
+      20,    1,  168,    2, 0x08,   26 /* Private */,
+      22,    1,  171,    2, 0x08,   28 /* Private */,
+      23,    1,  174,    2, 0x08,   30 /* Private */,
+      24,    0,  177,    2, 0x08,   32 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -104,6 +117,11 @@ static const uint qt_meta_data_microMouseServer[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Char,   21,
+    QMetaType::Void, QMetaType::Char,   21,
+    QMetaType::Void, QMetaType::Char,   21,
     QMetaType::Void,
 
        0        // eod
@@ -130,6 +148,11 @@ void microMouseServer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 12: _t->connect2mouse(); break;
         case 13: _t->startAI(); break;
         case 14: _t->studentAI(); break;
+        case 15: _t->checkIntersection(); break;
+        case 16: _t->backtrack((*reinterpret_cast< char(*)>(_a[1]))); break;
+        case 17: _t->twoTurns((*reinterpret_cast< char(*)>(_a[1]))); break;
+        case 18: _t->threeTurns((*reinterpret_cast< char(*)>(_a[1]))); break;
+        case 19: _t->testPaths(); break;
         default: ;
         }
     }
@@ -143,7 +166,7 @@ const QMetaObject microMouseServer::staticMetaObject = { {
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_microMouseServer_t
 , QtPrivate::TypeAndForceComplete<microMouseServer, std::true_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPoint, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<char, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<char, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<char, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
 
 
 >,
@@ -170,13 +193,13 @@ int microMouseServer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 15)
+        if (_id < 20)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 15;
+        _id -= 20;
     }
     return _id;
 }

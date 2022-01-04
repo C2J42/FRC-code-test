@@ -42,6 +42,12 @@ private slots:
     void connect2mouse();
     void startAI();
     void studentAI();
+    //functions I've made
+    void checkIntersection();
+    void backtrack(char dir);
+    void twoTurns(char dir);
+    void threeTurns(char dir);
+    void testPaths() ;
 
 
 private:
