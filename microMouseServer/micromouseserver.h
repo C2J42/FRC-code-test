@@ -43,10 +43,11 @@ private slots:
     void startAI();
     void studentAI();
     //functions I've made
-    void checkIntersection();
-    void backtrack(char dir);
-    void twoTurns(char dir);
-    void threeTurns(char dir);
+    void moveHandler();
+    void backtrack();
+    void twoTurns(int visit = 1);
+    void threeTurns(int visit = 1);
+    void dirTurn(char dir) ;
     void testPaths() ;
 
 

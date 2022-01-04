@@ -5,49 +5,32 @@
 
 int moveNum = 0 ;
 char moves[400] ; //400 bc 400 total squares on maze
+int intersections[100] ; //save moveNum value of where intersections were for backtrack purposes.
+
+//need some way of marking intersections as "complete"
+//need an isEnd() function to test if its the end
 
 void microMouseServer::studentAI()
 {
-    testPaths() ;
-
     /* Wall hugging:
     if (!moveForward()) { turnRight() ; }
     if(!isWallLeft()) { turnLeft() ; }
     */
 }
 
-void microMouseServer::testPaths()
+void microMouseServer::backtrack()
 {
-    checkIntersection() ;
-    moveForward() ;
-    moveNum++ ;
+    //go reverse direction using moves array and subtract from moveNum until it matches with a value from intersections array
+
 }
 
-void microMouseServer::backtrack(char dir)
-{
-    switch (dir)
-    {
-    case 'f':
-        break ;
-    case 'l':
-        break ;
-    case 'r':
-        break ;
-    }
-}
-
-void microMouseServer::checkIntersection()
+void microMouseServer::moveHandler()
 {
     int check = int(!isWallLeft()) + int(!isWallRight()) + int(!isWallForward()) ;
     switch (check) {
     case 0:
         //dead end
         moves[moveNum] = 'x' ;
-        if (!hasoutputted)
-        {
-            printUI(moves) ;
-            hasoutputted = true ;
-        }
         break ;
     case 1: //single path
         if (!isWallRight()) {
@@ -61,40 +44,79 @@ void microMouseServer::checkIntersection()
         }
         break ;
     case 2: //two turn intersection
-        //two turn options
+        twoTurns() ;
         break ;
     case 3:
-        //three turn options
+        threeTurns() ;
         break ;
     }
 }
 
-void microMouseServer::twoTurns(char dir)
+void microMouseServer::twoTurns(int visit)
 {
-    if (isWallForward())
+    if (visit==3)
     {
-
+        //backtrack stuff
     }
+    //turn types: 1=> left/forward. 2=> right/forward. 3=> left/right.
+    int type = NULL;
+    char dir = NULL;
+    if (isWallRight()) { type=1; }
+    else if (isWallLeft()) { type=2; }
+    else if (isWallForward()) {type=3; }
+    switch (type)
+    {
+    case 1:
+        if (visit==1) { dir='l'; }
+        else if (visit==2) { dir='f'; }
+        break ;
+    case 2:
+        if (visit==1) { dir='r'; }
+        else if (visit==2) { dir='f'; }
+        break ;
+    case 3:
+        if (visit==1) { dir='l'; }
+        else if (visit==2) { dir='r'; }
+        break ;
+    }
+    dirTurn(dir) ;
+}
+
+void microMouseServer::threeTurns(int visit)
+{
+    if (visit=4)
+    {
+        //backtrack stuff
+    }
+    char dir = NULL;
+    switch(visit)
+    {
+    case 1:
+        dir = 'l' ;
+        break;
+    case 2:
+        dir = 'f' ;
+        break ;
+    case 3:
+        dir = 'r' ;
+        break ;
+    }
+    dirTurn(dir) ;
+}
+
+void microMouseServer::dirTurn(char dir)
+{
+    moves[moveNum] = dir ;
+    moveNum++ ;
     switch (dir)
     {
     case 'f':
         break ;
     case 'l':
+        turnLeft() ;
         break ;
     case 'r':
-        break ;
-    }
-}
-
-void microMouseServer::threeTurns(char dir)
-{
-    switch (dir)
-    {
-    case 'f':
-        break ;
-    case 'l':
-        break ;
-    case 'r':
+        turnRight() ;
         break ;
     }
 }
