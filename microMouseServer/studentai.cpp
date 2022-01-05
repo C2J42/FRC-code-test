@@ -10,8 +10,17 @@ int intersections[100] ; //save moveNum value of where intersections were for ba
 //need some way of marking intersections as "complete"
 //need an isEnd() function to test if its the end
 
+bool backtracking = false ;
+
 void microMouseServer::studentAI()
 {
+    if (backtracking==false)
+    {
+    moveHandler() ;
+    moveForward() ;
+    } else {
+        backtrack() ;
+    }
     /* Wall hugging:
     if (!moveForward()) { turnRight() ; }
     if(!isWallLeft()) { turnLeft() ; }
@@ -20,8 +29,29 @@ void microMouseServer::studentAI()
 
 void microMouseServer::backtrack()
 {
-    //go reverse direction using moves array and subtract from moveNum until it matches with a value from intersections array
-
+    switch (moves[moveNum])
+    {
+    case 'f':
+        turnLeft() ;
+        turnLeft() ;
+        moveForward() ;
+        turnLeft() ;
+        turnLeft() ;
+        break ;
+    case 'r':
+        turnRight() ;
+        turnRight() ;
+        moveForward() ;
+        turnRight() ;
+        break ;
+    case 'l':
+        turnLeft() ;
+        turnLeft() ;
+        moveForward() ;
+        turnLeft() ;
+        break ;
+    }
+    moveNum-- ;
 }
 
 void microMouseServer::moveHandler()
@@ -30,7 +60,8 @@ void microMouseServer::moveHandler()
     switch (check) {
     case 0:
         //dead end
-        moves[moveNum] = 'x' ;
+        backtracking = true ;
+        printUI(moves) ;
         break ;
     case 1: //single path
         if (!isWallRight()) {
@@ -50,6 +81,7 @@ void microMouseServer::moveHandler()
         threeTurns() ;
         break ;
     }
+    moveNum++ ;
 }
 
 void microMouseServer::twoTurns(int visit)
@@ -84,7 +116,7 @@ void microMouseServer::twoTurns(int visit)
 
 void microMouseServer::threeTurns(int visit)
 {
-    if (visit=4)
+    if (visit==4)
     {
         //backtrack stuff
     }
@@ -107,7 +139,6 @@ void microMouseServer::threeTurns(int visit)
 void microMouseServer::dirTurn(char dir)
 {
     moves[moveNum] = dir ;
-    moveNum++ ;
     switch (dir)
     {
     case 'f':
