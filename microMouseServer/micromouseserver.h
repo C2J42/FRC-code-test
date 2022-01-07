@@ -45,10 +45,10 @@ private slots:
     //functions I've made
     void moveHandler();
     void backtrack();
-    void twoTurns(int visit = 1);
-    void threeTurns(int visit = 1);
+    void twoTurns();
+    void threeTurns();
     void dirTurn(char dir) ;
-    void testPaths() ;
+    int intersectionCheck() ;
 
 
 private:

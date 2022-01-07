@@ -10,14 +10,16 @@ int intersections[100] ; //save moveNum value of where intersections were for ba
 //need some way of marking intersections as "complete"
 //need an isEnd() function to test if its the end
 
-bool backtracking = false ;
+bool g_backtracking = false ;
+int g_visit = 1 ;
 
 void microMouseServer::studentAI()
 {
-    if (backtracking==false)
+    printUI(moves) ;
+    if (g_backtracking==false)
     {
-    moveHandler() ;
-    moveForward() ;
+        moveHandler() ;
+        moveForward() ;
     } else {
         backtrack() ;
     }
@@ -52,6 +54,15 @@ void microMouseServer::backtrack()
         break ;
     }
     moveNum-- ;
+    int x = intersectionCheck() ;
+    if (x>=2) // need to fix. Only works if dead end is immediatly after an intersection
+    {
+        g_backtracking = false ;
+        if ((x+1) <= g_visit)
+        {
+            g_visit = 1 ;
+        }
+    }
 }
 
 void microMouseServer::moveHandler()
@@ -60,8 +71,8 @@ void microMouseServer::moveHandler()
     switch (check) {
     case 0:
         //dead end
-        backtracking = true ;
-        printUI(moves) ;
+        g_visit++ ;
+        g_backtracking = true ;
         break ;
     case 1: //single path
         if (!isWallRight()) {
@@ -84,11 +95,13 @@ void microMouseServer::moveHandler()
     moveNum++ ;
 }
 
-void microMouseServer::twoTurns(int visit)
+void microMouseServer::twoTurns()
 {
-    if (visit==3)
+    if (g_visit>=3)
     {
-        //backtrack stuff
+        g_visit = 1 ;
+        g_backtracking = true ;
+        return ;
     }
     //turn types: 1=> left/forward. 2=> right/forward. 3=> left/right.
     int type = NULL;
@@ -99,29 +112,31 @@ void microMouseServer::twoTurns(int visit)
     switch (type)
     {
     case 1:
-        if (visit==1) { dir='l'; }
-        else if (visit==2) { dir='f'; }
+        if (g_visit==1) { dir='l'; }
+        else if (g_visit==2) { dir='f'; }
         break ;
     case 2:
-        if (visit==1) { dir='r'; }
-        else if (visit==2) { dir='f'; }
+        if (g_visit==1) { dir='r'; }
+        else if (g_visit==2) { dir='f'; }
         break ;
     case 3:
-        if (visit==1) { dir='l'; }
-        else if (visit==2) { dir='r'; }
+        if (g_visit==1) { dir='l'; }
+        else if (g_visit==2) { dir='r'; }
         break ;
     }
     dirTurn(dir) ;
 }
 
-void microMouseServer::threeTurns(int visit)
+void microMouseServer::threeTurns()
 {
-    if (visit==4)
+    if (g_visit>=4)
     {
-        //backtrack stuff
+        g_visit = 1 ;
+        g_backtracking = true ;
+        return ;
     }
     char dir = NULL;
-    switch(visit)
+    switch(g_visit)
     {
     case 1:
         dir = 'l' ;
@@ -148,6 +163,26 @@ void microMouseServer::dirTurn(char dir)
         break ;
     case 'r':
         turnRight() ;
+        break ;
+    }
+}
+
+int microMouseServer::intersectionCheck()
+{
+    int check = int(!isWallLeft()) + int(!isWallRight()) + int(!isWallForward()) ;
+    switch (check) {
+    case 0: // dead end
+    case 1: // single path
+        return 0 ;
+        break ;
+    case 2: // two turn intersection
+        return 2 ;
+        break ;
+    case 3: // three turn intersection
+        return 3 ;
+        break ;
+    default:
+        return false ;
         break ;
     }
 }
