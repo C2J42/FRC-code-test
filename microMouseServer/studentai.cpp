@@ -5,16 +5,79 @@ char g_map[20][20] ;
 int g_posX = 1 ;
 int g_posY = 1 ;
 char g_lastMove = 'n' ;
-bool atEnd = false ;
+bool g_atEnd = false ;
+
+int g_lastFourCoords[4][2] ;
+char g_lastFourTurns[4] ;
 
 void microMouseServer::studentAI()
 {
-    if (!atEnd) { intersectionManager(); }
-    if (g_posX == 12 && g_posY == 8) // basically just telling the mouse where the end is
+    if (!endCheck()) { intersectionManager(); }
+    else { foundFinish(); }
+    printUI(g_lastFourTurns);
+}
+
+bool microMouseServer::endCheck()
+{
+    char posCombos[8][4] = {{'n','e','s','w'},{'n','w','s','e'},{'s','w','n','e'},{'s','e','n','w'},{'w','n','e','s'},{'w','s','e','n'},{'e','n','w','s'},{'e','s','w','n'}} ;
+    for (int i=0; i<8; i++)
     {
-        atEnd = true ;
-        foundFinish() ;
+        bool match = true ;
+        for (int x=0; x<4; x++)
+        {
+            if (posCombos[i][x] != g_lastFourTurns[x]) {match=false;}
+        }
+        if (match==true) {printUI("cool"); return true;}
     }
+    return false ;
+    /*bool conditionMatch = true ;
+    int nLoc ;
+    for (int i=0; i<4; i++)
+    {
+        if (g_lastFourTurns[i] == 'n')
+        {
+            nLoc = i ;
+        }
+    }
+    switch(nLoc)
+    {
+    case 0:
+    {
+        if (g_lastFourTurns[2] != 's') { conditionMatch = false; }
+        if (!((g_lastFourTurns[1] == 'w' && g_lastFourTurns[3] == 'e') || (g_lastFourTurns[1] == 'e' && g_lastFourTurns[3] == 'w'))) { conditionMatch = false; }
+    }
+    case 1:
+    {
+        if (g_lastFourTurns[3] != 's') { conditionMatch = false; }
+        if (!((g_lastFourTurns[2] == 'w' && g_lastFourTurns[0] == 'e') || (g_lastFourTurns[2] == 'e' && g_lastFourTurns[0] == 'w'))) { conditionMatch = false; }
+    }
+    case 2:
+    {
+        if (g_lastFourTurns[0] != 's') { conditionMatch = false; }
+        if (!((g_lastFourTurns[1] == 'w' && g_lastFourTurns[3] == 'e') || (g_lastFourTurns[1] == 'e' && g_lastFourTurns[3] == 'w'))) { conditionMatch = false; }
+    }
+    case 3:
+    {
+        if (g_lastFourTurns[1] != 's') { conditionMatch = false; }
+        if (!((g_lastFourTurns[2] == 'w' && g_lastFourTurns[0] == 'e') || (g_lastFourTurns[2] == 'e' && g_lastFourTurns[0] == 'w'))) { conditionMatch = false; }
+    }
+    default:
+        conditionMatch = false ;
+        break ;
+    }
+    if (conditionMatch == true)
+    {
+        printUI("cool") ;
+    }
+    return conditionMatch ;*/
+}
+
+void moveLog(char dir)
+{
+    g_lastFourTurns[0] = g_lastFourTurns[1] ;
+    g_lastFourTurns[1] = g_lastFourTurns[2] ;
+    g_lastFourTurns[2] = g_lastFourTurns[3] ;
+    g_lastFourTurns[3] = dir ;
 }
 
 void microMouseServer::intersectionManager()
@@ -66,6 +129,7 @@ void microMouseServer::intersectionManager()
         break ;
     }
     }
+    moveLog(g_lastMove) ;
 }
 
 void microMouseServer::north()

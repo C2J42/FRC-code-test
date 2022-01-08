@@ -52,6 +52,7 @@ private slots:
     bool isWallEast() ;
     bool isWallSouth() ;
     bool isWallWest() ;
+    bool endCheck() ;
 
 
 private:
