@@ -1,4 +1,4 @@
-# FRC-code-test
+# FRC-code-test - Christian Johnston
 This is my submission for the FRC coding skill test.
 
 My solution uses RNG to explore the maze while making a map of dead ends. 
