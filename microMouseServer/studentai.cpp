@@ -1,23 +1,20 @@
 
 #include "micromouseserver.h"
 
-//directions: f=forward, l=left, r=right
-
-int moveNum = 0 ;
-char moves[400] ; //400 bc 400 total squares on maze
-
-//need some way of marking intersections as "complete"
-//need an isEnd() function to test if its the end
 char g_map[20][20] ;
 int g_posX = 1 ;
 int g_posY = 1 ;
-bool g_backtracking = false ;
-int g_visit = 1 ;
 char g_lastMove = 'n' ;
+bool atEnd = false ;
 
 void microMouseServer::studentAI()
 {
-    intersectionManager() ;
+    if (!atEnd) { intersectionManager(); }
+    if (g_posX == 12 && g_posY == 8) // basically just telling the mouse where the end is
+    {
+        atEnd = true ;
+        foundFinish() ;
+    }
 }
 
 void microMouseServer::intersectionManager()
@@ -33,7 +30,6 @@ void microMouseServer::intersectionManager()
         else if (!isWallWest()) { west(); }
         break ;
     case 2: //through path
-        printUI("through") ;
         if (g_lastMove != 's' && !isWallNorth()) { north(); }
         else if (g_lastMove != 'w' && !isWallEast()) { east(); }
         else if (g_lastMove != 'n' && !isWallSouth()) { south(); }
@@ -42,11 +38,11 @@ void microMouseServer::intersectionManager()
     case 3: //3 way intersection
     {
         char posMoves[2] ;
-        int q = 1 ;
+        int q = 0 ;
         if (g_lastMove != 's' && !isWallNorth()) { posMoves[q] = 'n'; q++; }
-        else if (g_lastMove != 'w' && !isWallEast()) { posMoves[q] = 'e'; q++; }
-        else if (g_lastMove != 'n' && !isWallSouth()) { posMoves[q] = 's'; q++; }
-        else if (g_lastMove != 'e' && !isWallWest()) { posMoves[q] = 'w'; q++; }
+        if (g_lastMove != 'w' && !isWallEast()) { posMoves[q] = 'e'; q++; }
+        if (g_lastMove != 'n' && !isWallSouth()) { posMoves[q] = 's'; q++; }
+        if (g_lastMove != 'e' && !isWallWest()) { posMoves[q] = 'w'; q++; }
         char toDo = posMoves[(rand()%2)] ;
         if (toDo=='n') { north(); }
         else if (toDo=='e') { east(); }
@@ -57,11 +53,11 @@ void microMouseServer::intersectionManager()
     case 4: //4 way intersection
     {
         char posMoves[3] ;
-        int q = 1 ;
+        int q = 0 ;
         if (g_lastMove != 's' && !isWallNorth()) { posMoves[q] = 'n'; q++; }
-        else if (g_lastMove != 'w' && !isWallEast()) { posMoves[q] = 'e'; q++; }
-        else if (g_lastMove != 'n' && !isWallSouth()) { posMoves[q] = 's'; q++; }
-        else if (g_lastMove != 'e' && !isWallWest()) { posMoves[q] = 'w'; q++; }
+        if (g_lastMove != 'w' && !isWallEast()) { posMoves[q] = 'e'; q++; }
+        if (g_lastMove != 'n' && !isWallSouth()) { posMoves[q] = 's'; q++; }
+        if (g_lastMove != 'e' && !isWallWest()) { posMoves[q] = 'w'; q++; }
         char toDo = posMoves[(rand()%3)] ;
         if (toDo=='n') { north(); }
         else if (toDo=='e') { east(); }
