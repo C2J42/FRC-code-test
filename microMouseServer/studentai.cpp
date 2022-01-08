@@ -5,186 +5,132 @@
 
 int moveNum = 0 ;
 char moves[400] ; //400 bc 400 total squares on maze
-int intersections[100] ; //save moveNum value of where intersections were for backtrack purposes.
 
 //need some way of marking intersections as "complete"
 //need an isEnd() function to test if its the end
-
+char g_map[20][20] ;
+int g_posX = 1 ;
+int g_posY = 1 ;
 bool g_backtracking = false ;
 int g_visit = 1 ;
+char g_lastMove = 'n' ;
 
 void microMouseServer::studentAI()
 {
-    printUI(moves) ;
-    if (g_backtracking==false)
-    {
-        moveHandler() ;
-        moveForward() ;
-    } else {
-        backtrack() ;
-    }
-    /* Wall hugging:
-    if (!moveForward()) { turnRight() ; }
-    if(!isWallLeft()) { turnLeft() ; }
-    */
+    intersectionManager() ;
 }
 
-void microMouseServer::backtrack()
+void microMouseServer::intersectionManager()
 {
-    switch (moves[moveNum])
+    int check = int(!isWallNorth()) + int(!isWallEast()) + int(!isWallSouth()) + int(!isWallWest()) ;
+    switch (check)
     {
-    case 'f':
-        turnLeft() ;
-        turnLeft() ;
-        moveForward() ;
-        turnLeft() ;
-        turnLeft() ;
+    case 1: //dead end
+        g_map[g_posX][g_posY] = 'x' ;
+        if (!isWallNorth()) { north(); }
+        else if (!isWallEast()) { east(); }
+        else if (!isWallSouth()) { south(); }
+        else if (!isWallWest()) { west(); }
         break ;
-    case 'r':
-        turnRight() ;
-        turnRight() ;
-        moveForward() ;
-        turnRight() ;
+    case 2: //through path
+        printUI("through") ;
+        if (g_lastMove != 's' && !isWallNorth()) { north(); }
+        else if (g_lastMove != 'w' && !isWallEast()) { east(); }
+        else if (g_lastMove != 'n' && !isWallSouth()) { south(); }
+        else if (g_lastMove != 'e' && !isWallWest()) { west(); }
         break ;
-    case 'l':
-        turnLeft() ;
-        turnLeft() ;
-        moveForward() ;
-        turnLeft() ;
+    case 3: //3 way intersection
+    {
+        char posMoves[2] ;
+        int q = 1 ;
+        if (g_lastMove != 's' && !isWallNorth()) { posMoves[q] = 'n'; q++; }
+        else if (g_lastMove != 'w' && !isWallEast()) { posMoves[q] = 'e'; q++; }
+        else if (g_lastMove != 'n' && !isWallSouth()) { posMoves[q] = 's'; q++; }
+        else if (g_lastMove != 'e' && !isWallWest()) { posMoves[q] = 'w'; q++; }
+        char toDo = posMoves[(rand()%2)] ;
+        if (toDo=='n') { north(); }
+        else if (toDo=='e') { east(); }
+        else if (toDo=='s') { south(); }
+        else if (toDo=='w') { west(); }
         break ;
     }
-    moveNum-- ;
-    int x = intersectionCheck() ;
-    if (x>=2) // need to fix. Only works if dead end is immediatly after an intersection
+    case 4: //4 way intersection
     {
-        g_backtracking = false ;
-        if ((x+1) <= g_visit)
-        {
-            g_visit = 1 ;
-        }
-    }
-}
-
-void microMouseServer::moveHandler()
-{
-    int check = int(!isWallLeft()) + int(!isWallRight()) + int(!isWallForward()) ;
-    switch (check) {
-    case 0:
-        //dead end
-        g_visit++ ;
-        g_backtracking = true ;
-        break ;
-    case 1: //single path
-        if (!isWallRight()) {
-            turnRight();
-            moves[moveNum] = 'r' ;
-        } else if (!isWallLeft()) {
-            turnLeft();
-            moves[moveNum] = 'l' ;
-        } else {
-            moves[moveNum] = 'f' ;
-        }
-        break ;
-    case 2: //two turn intersection
-        twoTurns() ;
-        break ;
-    case 3:
-        threeTurns() ;
+        char posMoves[3] ;
+        int q = 1 ;
+        if (g_lastMove != 's' && !isWallNorth()) { posMoves[q] = 'n'; q++; }
+        else if (g_lastMove != 'w' && !isWallEast()) { posMoves[q] = 'e'; q++; }
+        else if (g_lastMove != 'n' && !isWallSouth()) { posMoves[q] = 's'; q++; }
+        else if (g_lastMove != 'e' && !isWallWest()) { posMoves[q] = 'w'; q++; }
+        char toDo = posMoves[(rand()%3)] ;
+        if (toDo=='n') { north(); }
+        else if (toDo=='e') { east(); }
+        else if (toDo=='s') { south(); }
+        else if (toDo=='w') { west(); }
         break ;
     }
-    moveNum++ ;
-}
-
-void microMouseServer::twoTurns()
-{
-    if (g_visit>=3)
-    {
-        g_visit = 1 ;
-        g_backtracking = true ;
-        return ;
-    }
-    //turn types: 1=> left/forward. 2=> right/forward. 3=> left/right.
-    int type = NULL;
-    char dir = NULL;
-    if (isWallRight()) { type=1; }
-    else if (isWallLeft()) { type=2; }
-    else if (isWallForward()) {type=3; }
-    switch (type)
-    {
-    case 1:
-        if (g_visit==1) { dir='l'; }
-        else if (g_visit==2) { dir='f'; }
-        break ;
-    case 2:
-        if (g_visit==1) { dir='r'; }
-        else if (g_visit==2) { dir='f'; }
-        break ;
-    case 3:
-        if (g_visit==1) { dir='l'; }
-        else if (g_visit==2) { dir='r'; }
-        break ;
-    }
-    dirTurn(dir) ;
-}
-
-void microMouseServer::threeTurns()
-{
-    if (g_visit>=4)
-    {
-        g_visit = 1 ;
-        g_backtracking = true ;
-        return ;
-    }
-    char dir = NULL;
-    switch(g_visit)
-    {
-    case 1:
-        dir = 'l' ;
-        break;
-    case 2:
-        dir = 'f' ;
-        break ;
-    case 3:
-        dir = 'r' ;
-        break ;
-    }
-    dirTurn(dir) ;
-}
-
-void microMouseServer::dirTurn(char dir)
-{
-    moves[moveNum] = dir ;
-    switch (dir)
-    {
-    case 'f':
-        break ;
-    case 'l':
-        turnLeft() ;
-        break ;
-    case 'r':
-        turnRight() ;
-        break ;
     }
 }
 
-int microMouseServer::intersectionCheck()
+void microMouseServer::north()
 {
-    int check = int(!isWallLeft()) + int(!isWallRight()) + int(!isWallForward()) ;
-    switch (check) {
-    case 0: // dead end
-    case 1: // single path
-        return 0 ;
-        break ;
-    case 2: // two turn intersection
-        return 2 ;
-        break ;
-    case 3: // three turn intersection
-        return 3 ;
-        break ;
-    default:
-        return false ;
-        break ;
-    }
+    g_posY++ ;
+    moveForward() ;
+    g_lastMove = 'n' ;
+}
+void microMouseServer::east()
+{
+    g_posX++ ;
+    turnRight() ;
+    moveForward() ;
+    turnLeft() ;
+    g_lastMove = 'e' ;
+}
+void microMouseServer::south()
+{
+    g_posY-- ;
+    turnRight() ;
+    turnRight() ;
+    moveForward() ;
+    turnLeft() ;
+    turnLeft() ;
+    g_lastMove = 's' ;
+}
+void microMouseServer::west()
+{
+    g_posX-- ;
+    turnLeft() ;
+    moveForward() ;
+    turnRight() ;
+    g_lastMove = 'w' ;
+}
+
+bool microMouseServer::isWallNorth()
+{
+    bool isX = false ;
+    if (g_map[g_posX][g_posY+1] == 'x') { isX = true; }
+    return (isWallForward() || isX) ;
+}
+bool microMouseServer::isWallEast()
+{
+    bool isX = false ;
+    if (g_map[g_posX+1][g_posY] == 'x') { isX = true; }
+    return (isWallRight() || isX) ;
+}
+bool microMouseServer::isWallSouth()
+{
+    bool isX = false ;
+    if (g_map[g_posX][g_posY-1] == 'x') { isX = true; }
+    turnRight() ;
+    bool temp = isWallRight() ;
+    turnLeft() ;
+    return (temp || isX) ;
+}
+bool microMouseServer::isWallWest()
+{
+    bool isX = false ;
+    if (g_map[g_posX-1][g_posY] == 'x') { isX = true; }
+    return (isWallLeft() || isX) ;
 }
 
 /*

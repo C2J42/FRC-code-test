@@ -43,12 +43,15 @@ private slots:
     void startAI();
     void studentAI();
     //functions I've made
-    void moveHandler();
-    void backtrack();
-    void twoTurns();
-    void threeTurns();
-    void dirTurn(char dir) ;
-    int intersectionCheck() ;
+    void intersectionManager() ;
+    void north() ;
+    void east() ;
+    void south() ;
+    void west() ;
+    bool isWallNorth() ;
+    bool isWallEast() ;
+    bool isWallSouth() ;
+    bool isWallWest() ;
 
 
 private:
